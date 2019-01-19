@@ -8,8 +8,15 @@ http.createServer(function (request, response) {
     
     var pathName = url.parse(request.url).pathname;
     var fileName = pathName.substr(1); /* lets remove the "/" from the name */
-
-
+    var contentType = '';
+    var regex = /.json/;
+    var containsJson = regex.test(fileName);
+    if(containsJson){
+        contentType = 'application/json';
+    } else{
+        contentType = 'text/html';
+    }
+    
     /* lets try to read the html page found test */
     fileSystem.readFile(fileName , callback);
 
@@ -26,7 +33,7 @@ http.createServer(function (request, response) {
              * HTTP Status: 200 : OK
              * Content Type: text/html 
              */
-            response.writeHead(200, {'Content-Type': 'text/html'}); 
+            response.writeHead(200, {'Content-Type': contentType}); 
             response.write(data.toString());
         }     
         
